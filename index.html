@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PACKET PATH — OSI Transmission Lab</title>
+<style>
+:root{--bg:#080d18;--panel:#101827;--panel2:#0d1422;--line:#26354a;--text:#edf5ff;--muted:#91a4bf;--cyan:#55e6ff;--blue:#6d8cff;--violet:#b28cff;--green:#62edb2;--amber:#ffc86b;--red:#ff6b82;--radius:16px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#142744 0,transparent 38%),radial-gradient(ellipse at 90% 10%,#211a43 0,transparent 32%),var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer;transition:.18s ease}button:disabled{opacity:.4;cursor:not-allowed}.app{max-width:1500px;margin:auto;padding:22px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#57e5ff,#7c7bff);color:#07111f;font-weight:900;font-size:22px;box-shadow:0 0 30px #55e6ff30}.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:2.2px;font-weight:800}.brand h1{font-size:20px;letter-spacing:1.6px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}.top-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #2e4560;border-radius:999px;padding:7px 11px;color:#b8cce4;font-size:11px;letter-spacing:.6px}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}.btn{border:1px solid var(--line);background:#172236;color:var(--text);padding:10px 13px;border-radius:10px;font-weight:650}.btn:hover{border-color:#6686b5;transform:translateY(-1px)}.btn.primary{background:linear-gradient(120deg,#4de0f8,#8193ff);border:0;color:#07111f;box-shadow:0 6px 22px #4de0f822}.btn.ghost{background:transparent}.btn.small{padding:7px 10px;font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(310px,.85fr);gap:16px}.left,.right{display:flex;flex-direction:column;gap:16px;min-width:0}.panel{background:linear-gradient(145deg,#121c2c,#0e1624);border:1px solid #26364d;border-radius:var(--radius);padding:17px;box-shadow:0 12px 32px #00000017}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.panel-head h2{margin:0;font-size:14px;letter-spacing:.2px}.sub{color:var(--muted);font-size:11px}.label{display:block;color:#a9bbd2;font-size:11px;font-weight:700;margin-bottom:6px}.compose-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{width:100%;border:1px solid #2b3b53;background:#0a1220;color:var(--text);border-radius:10px;padding:10px 11px;outline:none}.field:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #55e6ff14}textarea.field{min-height:70px;resize:vertical}.message-field{grid-column:1/-1}.compose-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}.compose-bottom .note{color:var(--muted);font-size:11px;max-width:370px}.journey{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px}.journey-step{border:1px solid #28374b;background:#0c1421;border-radius:10px;padding:10px 5px;text-align:center;position:relative;color:#8195af;font-size:10px;font-weight:800;letter-spacing:.6px}.journey-step .num{display:grid;place-items:center;width:23px;height:23px;margin:0 auto 6px;border:1px solid #34465e;border-radius:50%;font-size:10px}.journey-step.active{border-color:#55e6ff80;color:var(--cyan);background:#102435;box-shadow:inset 0 0 22px #55e6ff0b}.journey-step.done{border-color:#62edb260;color:var(--green)}.network-wrap{border:1px solid #25364b;border-radius:13px;background:radial-gradient(ellipse at 50% 50%,#15253a 0, #0a1220 72%);overflow:hidden;position:relative}.network-svg{width:100%;height:auto;min-height:245px;display:block}.edge{stroke:#30455f;stroke-width:3;fill:none}.edge.active{stroke:var(--cyan);stroke-width:4;filter:drop-shadow(0 0 5px #55e6ff99)}.edge.failed{stroke:var(--red);stroke-dasharray:7 7}.node circle{fill:#111f31;stroke:#49617e;stroke-width:2}.node text{fill:#e5f1ff;font-size:11px;text-anchor:middle}.node .kind{fill:#8ca5c2;font-size:8px}.node.active circle{stroke:var(--cyan);filter:drop-shadow(0 0 7px #55e6ff99)}.node.dest circle{stroke:var(--green)}.packet-dot{fill:#fff;stroke:var(--cyan);stroke-width:3;filter:drop-shadow(0 0 7px var(--cyan))}.net-legend{display:flex;gap:14px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid #203047;color:var(--muted);font-size:10px}.legend-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}.layer-stack{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.layer{border:1px solid #2b3b52;background:#0c1421;border-radius:10px;padding:10px 4px;text-align:center;min-width:0;color:#9fb1c9}.layer .ln{font-size:10px;color:#607a99;font-weight:800}.layer .lname{font-size:10px;font-weight:750;margin-top:4px;overflow-wrap:anywhere}.layer .pdu{font-size:9px;color:#7189a7;margin-top:4px}.layer.active{border-color:var(--cyan);background:#102838;color:#eafcff;box-shadow:0 0 20px #55e6ff13}.layer.done{border-color:#62edb26b;color:var(--green)}.layer-btn{width:100%;border:0;background:transparent;color:inherit;padding:0}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#0a1220;border:1px solid #22334a;border-radius:11px;padding:12px}.metric .k{font-size:10px;color:var(--muted);letter-spacing:.7px;text-transform:uppercase}.metric .v{font-size:21px;font-weight:800;margin-top:3px}.metric .hint{font-size:10px;color:#8298b5}.progress-track{height:5px;border-radius:9px;background:#233147;overflow:hidden;margin-top:11px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width .25s}.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.control-row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.status-line{font-size:12px;color:var(--muted);margin-top:10px;min-height:18px}.inspector{background:#09111d;border:1px solid #26374e;border-radius:12px;padding:13px;min-height:130px}.inspector h3{margin:0 0 10px;font-size:12px}.kv{display:grid;grid-template-columns:110px 1fr;gap:7px;font-size:11px;margin:6px 0}.kv span:first-child{color:#8298b5}.kv span:last-child{color:#d8e8fb;overflow-wrap:anywhere}.codeish{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--cyan)!important}.log{display:flex;flex-direction:column;gap:8px;max-height:190px;overflow:auto;padding-right:3px}.log-row{display:grid;grid-template-columns:54px 1fr;gap:8px;font-size:11px}.log-time{font-family:ui-monospace,monospace;color:#6685a7}.log-msg{color:#b8c8dd}.log-msg strong{color:#eef7ff}.empty{color:#6f829c;font-size:11px;padding:14px 0}.success{display:none;border:1px solid #62edb270;background:#0d2a26;border-radius:13px;padding:14px;margin-top:13px}.success.show{display:block;animation:fade .3s}.success h3{margin:0 0 4px;color:var(--green);font-size:15px}.success p{margin:0;color:#b7d9d0;font-size:12px;overflow-wrap:anywhere}.toast{position:fixed;right:20px;bottom:20px;background:#17263a;border:1px solid #425c7b;border-radius:12px;padding:12px 15px;box-shadow:0 15px 40px #0008;max-width:320px;z-index:5;display:none}.toast.show{display:block;animation:fade .2s}.footer{text-align:center;color:#657b98;font-size:10px;padding:20px 0 4px}.footer strong{color:#91a6c2}.tag{font-size:10px;border:1px solid #314660;border-radius:6px;padding:4px 7px;color:#b9cbe2}.select-speed{max-width:110px;padding:7px}.learn{color:#bdcde0;font-size:12px}.learn summary{cursor:pointer;color:#d8e9fb;font-weight:700}.learn p{color:#91a4bf;margin:8px 0 0}.quiz-option{display:block;width:100%;text-align:left;margin:7px 0;padding:9px;border:1px solid #2a3c54;border-radius:9px;background:#0b1422;color:#dce9f9}.quiz-option:hover{border-color:var(--cyan)}@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}@media(max-width:1000px){.layout{grid-template-columns:1fr}.right{display:grid;grid-template-columns:1fr 1fr}.right .wide{grid-column:1/-1}}@media(max-width:650px){.app{padding:12px}.topbar{align-items:flex-start;flex-direction:column}.compose-grid{grid-template-columns:1fr}.message-field{grid-column:auto}.journey{grid-template-columns:repeat(5,minmax(0,1fr))}.journey-step{font-size:8px;padding:7px 2px}.journey-step .num{width:20px;height:20px}.layer-stack{grid-template-columns:repeat(4,1fr)}.right{display:flex}.info-grid{grid-template-columns:1fr 1fr}.network-svg{min-height:190px}.panel{padding:13px}.kv{grid-template-columns:92px 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="logo">↯</div><div><div class="eyebrow">NETWORK TRANSMISSION LAB</div><h1>PACKET PATH</h1><p>From message to delivery · Interactive OSI simulator</p></div></div>
+  <div class="top-actions"><span class="pill"><span class="dot"></span> SIMULATION MODE</span><button class="btn ghost small" id="helpBtn">How it works</button><button class="btn small" id="resetBtn">↻ Reset</button></div>
+</header>
+
+<main class="layout">
+<section class="left">
+  <div class="panel">
+    <div class="panel-head"><h2>01 / COMPOSE MESSAGE</h2><span class="tag">CLIENT-SIDE DEMO</span></div>
+    <div class="compose-grid">
+      <div><label class="label" for="source">SOURCE DEVICE</label><select class="field" id="source"><option value="PC-01">PC-01 · 192.168.1.10</option></select></div>
+      <div><label class="label" for="destination">DESTINATION DEVICE</label><select class="field" id="destination"><option value="Server-01">Server-01 · 10.0.0.20</option><option value="Server-02">Server-02 · 10.0.1.30</option></select></div>
+      <div><label class="label" for="protocol">TRANSPORT PROTOCOL</label><select class="field" id="protocol"><option value="TCP">TCP · reliable, connection-oriented (conceptual)</option><option value="UDP">UDP · connectionless datagrams</option></select></div>
+      <div><label class="label" for="mode">SIMULATION MODE</label><select class="field" id="mode"><option value="guided">Guided · auto-play stages</option><option value="explore">Explore · step manually</option></select></div>
+      <div class="message-field"><label class="label" for="message">MESSAGE PAYLOAD</label><textarea class="field" id="message" maxlength="240" placeholder="Type a message to send...">Hello, Network!</textarea></div>
+    </div>
+    <div class="compose-bottom"><div class="note">This is an educational simulation. It does not send real packets over your network.</div><button class="btn primary" id="transmitBtn">↗ Transmit Message</button></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>02 / TRANSMISSION JOURNEY</h2><span class="tag" id="stageTag">READY</span></div>
+    <div class="journey" id="journey">
+      <div class="journey-step active" data-stage="0"><div class="num">01</div>SENDER</div>
+      <div class="journey-step" data-stage="1"><div class="num">02</div>ENCAPSULATE</div>
+      <div class="journey-step" data-stage="2"><div class="num">03</div>ROUTING</div>
+      <div class="journey-step" data-stage="3"><div class="num">04</div>DECAPSULATE</div>
+      <div class="journey-step" data-stage="4"><div class="num">05</div>DELIVERED</div>
+    </div>
+    <div class="network-wrap">
+      <svg class="network-svg" viewBox="0 0 760 300" role="img" aria-label="Network topology showing source PC, switches, routers and destination server">
+        <defs><linearGradient id="lineGlow"><stop stop-color="#55e6ff"/><stop offset="1" stop-color="#9d8cff"/></linearGradient></defs>
+        <path class="edge" data-edge="pc-sw" d="M90 150 L190 150"/>
+        <path class="edge" data-edge="sw-r1" d="M220 150 L310 80"/>
+        <path class="edge" data-edge="sw-r2" d="M220 150 L310 220"/>
+        <path class="edge" data-edge="r1-r3" d="M340 80 L445 150"/>
+        <path class="edge" data-edge="r2-r3" d="M340 220 L445 150"/>
+        <path class="edge" data-edge="r3-sw2" d="M475 150 L560 150"/>
+        <path class="edge" data-edge="sw2-server" d="M590 150 L680 150"/>
+        <path class="edge" data-edge="sw2-server2" d="M585 166 L680 210"/>
+        <g class="node active" data-node="pc" transform="translate(70 150)"><circle r="22"/><text y="4">PC</text><text class="kind" y="39">SOURCE</text></g>
+        <g class="node" data-node="sw" transform="translate(205 150)"><circle r="18"/><text y="4">SW</text><text class="kind" y="34">SWITCH</text></g>
+        <g class="node" data-node="r1" transform="translate(325 80)"><circle r="20"/><text y="4">R1</text><text class="kind" y="36">ROUTER</text></g>
+        <g class="node" data-node="r2" transform="translate(325 220)"><circle r="20"/><text y="4">R2</text><text class="kind" y="36">ROUTER</text></g>
+        <g class="node" data-node="r3" transform="translate(460 150)"><circle r="20"/><text y="4">R3</text><text class="kind" y="36">ROUTER</text></g>
+        <g class="node" data-node="sw2" transform="translate(575 150)"><circle r="18"/><text y="4">SW</text><text class="kind" y="34">SWITCH</text></g>
+        <g class="node dest" data-node="server" transform="translate(700 150)"><circle r="22"/><text y="4">SRV</text><text class="kind" y="39">SERVER-01</text></g>
+        <g class="node" data-node="server2" transform="translate(700 220)"><circle r="20"/><text y="4">S2</text><text class="kind" y="35">SERVER-02</text></g>
+        <circle id="packetDot" class="packet-dot" cx="70" cy="150" r="6" opacity="0"/>
+        <text x="380" y="282" text-anchor="middle" fill="#6f89a9" font-size="10">ILLUSTRATIVE TOPOLOGY · ROUTE HIGHLIGHTED DURING TRANSMISSION</text>
+      </svg>
+      <div class="net-legend"><span><i class="legend-dot" style="background:var(--cyan)"></i>Active path</span><span><i class="legend-dot" style="background:#49617e"></i>Available link</span><span><i class="legend-dot" style="background:var(--green)"></i>Destination</span><span id="routeLabel">Route: not calculated</span></div>
+    </div>
+    <div style="margin-top:15px">
+      <div class="panel-head"><h2>OSI LAYER STACK</h2><span class="sub">Select a layer to inspect it</span></div>
+      <div class="layer-stack" id="layerStack"></div>
+    </div>
+    <div class="status-line" id="statusLine" aria-live="polite">Ready to transmit. Enter a message and press Transmit Message.</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="success" id="successBox"><h3>✓ MESSAGE DELIVERED</h3><p id="deliveredText"></p></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>03 / SIMULATION CONTROLS</h2><span class="sub">Step through the journey</span></div>
+    <div class="control-row"><div class="controls"><button class="btn primary" id="playBtn" disabled>▶ Play</button><button class="btn" id="stepBtn" disabled>Step Forward →</button><button class="btn" id="restartBtn">↻ Restart Journey</button></div><div class="controls"><label class="label" for="speed" style="margin:0">SPEED</label><select class="field select-speed" id="speed"><option value="1400">0.5×</option><option value="850" selected>1×</option><option value="420">2×</option></select></div></div>
+    <div class="status-line">Guided mode advances automatically. Explore mode pauses between stages so you can inspect the data.</div>
+  </div>
+</section>
+
+<aside class="right">
+  <div class="panel">
+    <div class="panel-head"><h2>LIVE TELEMETRY</h2><span class="dot"></span></div>
+    <div class="info-grid">
+      <div class="metric"><div class="k">Current stage</div><div class="v" id="metricStage" style="font-size:16px">Ready</div><div class="hint">Transmission lifecycle</div></div>
+      <div class="metric"><div class="k">Router hops</div><div class="v" id="metricHops">—</div><div class="hint">Selected route</div></div>
+      <div class="metric"><div class="k">Payload size</div><div class="v" id="metricBytes">15 B</div><div class="hint">UTF-8 payload length</div></div>
+      <div class="metric"><div class="k">Elapsed time</div><div class="v" id="metricTime">0.0s</div><div class="hint">Simulated time</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>PACKET INSPECTOR</h2><span class="tag" id="inspectorTag">APPLICATION DATA</span></div>
+    <div class="inspector" id="inspector"><h3>Original message</h3><div class="kv"><span>Payload</span><span class="codeish">Hello, Network!</span></div><div class="kv"><span>State</span><span>Ready to send</span></div><div class="kv"><span>Note</span><span>Illustrative protocol fields appear during transmission.</span></div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>EVENT TIMELINE</h2><span class="sub" id="eventCount">0 events</span></div>
+    <div class="log" id="eventLog"><div class="empty">Transmission events will appear here.</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>QUICK LEARN</h2><span class="tag">CN CONCEPTS</span></div>
+    <div class="learn">
+      <details open><summary>What is encapsulation?</summary><p>As data moves down the sender's protocol stack, layers add control information. The transport layer creates a segment/datagram, the network layer creates an IP packet, and the data-link layer creates a frame.</p></details>
+      <details style="margin-top:11px"><summary>Why does routing happen at Layer 3?</summary><p>Routers use network-layer addresses and routing information to select a next hop. Dijkstra is used here as a simplified shortest-path algorithm; this is not a full implementation of OSPF.</p></details>
+      <details style="margin-top:11px"><summary>Why do MAC addresses change?</summary><p>On each routed link, the router removes the incoming frame and builds a new frame for the next hop. The IP source and destination normally remain unchanged in this basic example.</p></details>
+      <details style="margin-top:11px"><summary>What does decapsulation do?</summary><p>The receiver processes the frame, packet and transport data, removes their conceptual wrappers, and delivers the original payload to the application.</p></details>
+    </div>
+  </div>
+</aside>
+</main>
+<div class="footer"><strong>PACKET PATH</strong> · Educational simulation only · No real packets are transmitted · Protocol fields are illustrative</div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const layers = [
+ {n:7,name:"Application",short:"Application",pdu:"Data",desc:"Provides network services to user applications. In this demonstration, the message is represented as application data, conceptually similar to data carried by HTTP.",adds:"Application protocol context (conceptual)",example:"HTTP, DNS"},
+ {n:6,name:"Presentation",short:"Presentation",pdu:"Data",desc:"Represents data formatting, character encoding, serialization and optional encryption. This layer is conceptual in many modern TCP/IP implementations.",adds:"Representation / encoding (conceptual)",example:"UTF-8, serialization, TLS-related functions"},
+ {n:5,name:"Session",short:"Session",pdu:"Data",desc:"Represents dialogue and session management between applications. Modern systems do not always implement a distinct Session layer.",adds:"Session context (conceptual)",example:"Session/dialogue management"},
+ {n:4,name:"Transport",short:"Transport",pdu:"Segment / datagram",desc:"Provides process-to-process delivery using port numbers. TCP offers reliable, ordered byte-stream delivery; UDP sends datagrams without TCP's reliability guarantees.",adds:"Source port, destination port; TCP sequence number (illustrative)",example:"TCP, UDP"},
+ {n:3,name:"Network",short:"Network",pdu:"Packet",desc:"Provides logical addressing and routing. Routers inspect the destination IP address and select a next hop. This simulator uses Dijkstra on a small weighted graph.",adds:"Source IP, destination IP, TTL / Hop Limit (illustrative)",example:"IPv4, IPv6, routing"},
+ {n:2,name:"Data Link",short:"Data Link",pdu:"Frame",desc:"Transfers frames across one local link. Each router removes the incoming link-layer frame and constructs a new frame for the outgoing link.",adds:"Source MAC, next-hop destination MAC, FCS concept",example:"Ethernet, Wi-Fi"},
+ {n:1,name:"Physical",short:"Physical",pdu:"Bits",desc:"Represents transmission of encoded bits over the physical medium. It does not choose routes.",adds:"Bitstream representation (visual only)",example:"Copper, fiber, radio"}
+];
+const graph = {
+ pc:[{to:"sw",cost:1}], sw:[{to:"pc",cost:1},{to:"r1",cost:2},{to:"r2",cost:1}],
+ r1:[{to:"sw",cost:2},{to:"r3",cost:2}], r2:[{to:"sw",cost:1},{to:"r3",cost:4}],
+ r3:[{to:"r1",cost:2},{to:"r2",cost:4},{to:"sw2",cost:1}], sw2:[{to:"r3",cost:1},{to:"server",cost:1},{to:"server2",cost:2}],
+ server:[{to:"sw2",cost:1}], server2:[{to:"sw2",cost:2}]
+};
+const nodeXY = {pc:[70,150],sw:[205,150],r1:[325,80],r2:[325,220],r3:[460,150],sw2:[575,150],server:[700,150],server2:[700,220]};
+const nodeLabels = {pc:"PC-01",sw:"SW-01",r1:"R1",r2:"R2",r3:"R3",sw2:"SW-02",server:"Server-01",server2:"Server-02"};
+const edgePairs = [["pc","sw","pc-sw"],["sw","r1","sw-r1"],["sw","r2","sw-r2"],["r1","r3","r1-r3"],["r2","r3","r2-r3"],["r3","sw2","r3-sw2"],["sw2","server","sw2-server"]];
+let state = {running:false,paused:false,complete:false,stage:-1,layerIndex:-1,route:[],routeCost:0,events:[],start:0,elapsed:0,timer:null,selectedLayer:7,stepIndex:0,message:"Hello, Network!",protocol:"TCP",dest:"server",source:"pc"};
+function dijkstra(start,end){
+ const dist={},prev={},unvisited=new Set(Object.keys(graph));
+ Object.keys(graph).forEach(n=>dist[n]=Infinity);dist[start]=0;
+ while(unvisited.size){let u=null;for(const n of unvisited)if(u===null||dist[n]<dist[u])u=n;if(u===null||dist[u]===Infinity)break;unvisited.delete(u);if(u===end)break;
+  (graph[u]||[]).forEach(e=>{if(!unvisited.has(e.to))return;const alt=dist[u]+e.cost;if(alt<dist[e.to]){dist[e.to]=alt;prev[e.to]=u;}});
+ }
+ if(dist[end]===Infinity)return {path:[],cost:Infinity};
+ const path=[];let cur=end;while(cur){path.unshift(cur);if(cur===start)break;cur=prev[cur];}
+ return {path,cost:dist[end]};
+}
+function nodeForDestination(){return $("destination").value==="Server-02"?"server2":"server"}
+function ipForDestination(){return $("destination").value==="Server-02"?"10.0.1.30":"10.0.0.20"}
+function bytes(){return new TextEncoder().encode($("message").value).length}
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2600)}
+function addEvent(msg){const t=((Date.now()-state.start)/1000).toFixed(1)+"s";state.events.unshift({t,msg});renderLog()}
+function renderLog(){const log=$("eventLog");$("eventCount").textContent=state.events.length+" events";if(!state.events.length){log.innerHTML='<div class="empty">Transmission events will appear here.</div>';return;}log.innerHTML=state.events.map(e=>`<div class="log-row"><div class="log-time">${e.t}</div><div class="log-msg">${e.msg}</div></div>`).join("")}
+function renderLayers(){
+ const stack=$("layerStack");stack.innerHTML="";
+ layers.forEach(l=>{const btn=document.createElement("button");btn.className="layer"+(state.selectedLayer===l.n?" active":"")+(state.stage===1&&state.layerIndex>=0&&l.n>7-state.layerIndex?" done":"");btn.innerHTML=`<div class="ln">L${l.n}</div><div class="lname">${l.short}</div><div class="pdu">${l.pdu}</div>`;btn.title=`Inspect OSI Layer ${l.n}: ${l.name}`;btn.addEventListener("click",()=>{state.selectedLayer=l.n;renderLayers();renderInspector(l.n);});stack.appendChild(btn)})
+}
+function renderInspector(layerNo){
+ const l=layers.find(x=>x.n===layerNo);if(!l)return;
+ $("inspectorTag").textContent=`L${l.n} · ${l.pdu.toUpperCase()}`;
+ const msg=escapeHtml(state.message||"");
+ let rows=`<div class="kv"><span>Layer</span><span>L${l.n} · ${l.name}</span></div><div class="kv"><span>Responsibility</span><span>${l.desc}</span></div><div class="kv"><span>PDU</span><span class="codeish">${l.pdu}</span></div><div class="kv"><span>Protocols / examples</span><span>${l.example}</span></div><div class="kv"><span>Information</span><span>${l.adds}</span></div>`;
+ if(l.n===4)rows+=`<div class="kv"><span>Protocol</span><span class="codeish">${$("protocol").value}</span></div><div class="kv"><span>Ports</span><span class="codeish">51514 → ${$("protocol").value==="TCP"?"443":"5353"}</span></div>`;
+ if(l.n===3)rows+=`<div class="kv"><span>Source IP</span><span class="codeish">192.168.1.10</span></div><div class="kv"><span>Destination IP</span><span class="codeish">${ipForDestination()}</span></div><div class="kv"><span>Route</span><span class="codeish">${state.route.length?state.route.map(n=>nodeLabels[n]).join(" → "):"Not calculated yet"}</span></div><div class="kv"><span>TTL</span><span class="codeish">64 (illustrative)</span></div>`;
+ if(l.n===2)rows+=`<div class="kv"><span>Source MAC</span><span class="codeish">${state.route.length?"02:00:00:00:01:10":"Illustrative"}</span></div><div class="kv"><span>Destination MAC</span><span class="codeish">${state.route.length?"Next-hop MAC on current link":"Not yet determined"}</span></div><div class="kv"><span>FCS</span><span>Conceptual Ethernet trailer; not calculated</span></div>`;
+ if(l.n===1)rows+=`<div class="kv"><span>Bitstream</span><span class="codeish">${state.message?Array.from(new TextEncoder().encode(state.message)).slice(0,8).map(b=>b.toString(2).padStart(8,"0")).join(" ")+" …":"No payload"}</span></div>`;
+ rows+=`<div class="kv"><span>Payload preview</span><span class="codeish">"${msg}"</span></div><div class="kv"><span>Simulation note</span><span>Fields are illustrative; no real frame or checksum is transmitted.</span></div>`;
+ $("inspector").innerHTML=`<h3>${l.n}. ${l.name}</h3>${rows}`;
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function setStage(stage,layerIndex=-1){
+ state.stage=stage;state.layerIndex=layerIndex;
+ document.querySelectorAll(".journey-step").forEach(el=>{const s=Number(el.dataset.stage);el.classList.toggle("active",s===stage);el.classList.toggle("done",s<stage)});
+ const labels=["SENDER","ENCAPSULATION","ROUTING","DECAPSULATION","DELIVERED"];
+ $("stageTag").textContent=labels[Math.max(0,stage)]||"READY";$("metricStage").textContent=labels[Math.max(0,stage)]||"Ready";
+ $("progressFill").style.width=(stage<0?0:stage/4*100)+"%";
+ if(stage===1&&layerIndex>=0){state.selectedLayer=7-layerIndex;$("statusLine").textContent=`Sender: Layer ${7-layerIndex} (${layers.find(l=>l.n===7-layerIndex).name}) is processing the message.`}
+ else if(stage===3&&layerIndex>=0){state.selectedLayer=layerIndex+1;$("statusLine").textContent=`Receiver: Layer ${layerIndex+1} (${layers.find(l=>l.n===layerIndex+1).name}) is processing incoming data.`}
+ else if(stage===0)$("statusLine").textContent="Message created. Ready to begin sender-side encapsulation.";
+ else if(stage===2)$("statusLine").textContent="Network layer selects a route; routers forward the packet hop by hop.";
+ else if(stage===4)$("statusLine").textContent="Transmission complete. Original payload has been delivered to the destination application.";
+ renderLayers();renderInspector(state.selectedLayer);updateTopology();
+}
+function updateTopology(){
+ document.querySelectorAll(".edge").forEach(e=>{e.classList.remove("active","failed")});
+ document.querySelectorAll(".node").forEach(n=>n.classList.remove("active"));
+ const route=state.route;
+ if(route.length>1){
+  for(let i=0;i<route.length-1;i++){const pair=[route[i],route[i+1]].sort().join("-");const edgeMap={"pc-sw":"pc-sw","r1-sw":"sw-r1","r2-sw":"sw-r2","r1-r3":"r1-r3","r2-r3":"r2-r3","r3-sw2":"r3-sw2","server-sw2":"sw2-server","server2-sw2":"sw2-server2"};const key=edgeMap[pair];if(key){const el=document.querySelector(`[data-edge="${key}"]`);if(el)el.classList.add("active")}}
+ }
+ const activeNode=state.stage===4?state.dest:(state.stage===2?state.route[Math.min(state.stepIndex,state.route.length-1)]:state.stage===3?state.dest:state.source);
+ const el=document.querySelector(`[data-node="${activeNode}"]`);if(el)el.classList.add("active");
+ document.querySelector('[data-node="server"]').classList.toggle("dest",state.dest==="server");document.querySelector('[data-node="server2"]').classList.toggle("dest",state.dest==="server2");
+ $("routeLabel").textContent=route.length?"Route: "+route.map(n=>nodeLabels[n]||n).join(" → "):"Route: not calculated";
+}
+function movePacketAlongRoute(done){
+ const dot=$("packetDot");const route=state.route;
+ const coords=route.map(n=>nodeXY[n]).filter(Boolean);
+ if(coords.length<2){done();return}
+ let i=0;dot.setAttribute("opacity","1");
+ function next(){if(!state.running||state.paused)return;if(i>=coords.length){dot.setAttribute("opacity","0");done();return}
+  const [x,y]=coords[i];dot.setAttribute("cx",x);dot.setAttribute("cy",y);state.stepIndex=i;updateTopology();
+  if(i>0)addEvent(`Forwarded to <strong>${nodeLabels[route[i]]||route[i]}</strong>.`);
+  i++;state.timer=setTimeout(next,Number($("speed").value));
+ }
+ next();
+}
+function clearTimer(){if(state.timer){clearTimeout(state.timer);state.timer=null}}
+function setControls(){const active=state.running&&!state.complete;$("playBtn").disabled=!state.running||state.complete;$("stepBtn").disabled=!state.running||state.complete||$("mode").value!=="explore";$("playBtn").textContent=state.paused?"▶ Resume":"Ⅱ Pause";$("transmitBtn").disabled=state.running&&!state.complete}
+function startTransmission(){
+ clearTimer();const msg=$("message").value.trim();if(!msg){toast("Enter a message before transmitting.");$("message").focus();return}
+ state={...state,running:true,paused:false,complete:false,stage:0,layerIndex:-1,route:[],routeCost:0,events:[],start:Date.now(),elapsed:0,stepIndex:0,message:msg,protocol:$("protocol").value,dest:nodeForDestination(),source:"pc"};
+ $("successBox").classList.remove("show");$("packetDot").setAttribute("opacity","0");$("metricBytes").textContent=bytes()+" B";$("metricTime").textContent="0.0s";$("metricHops").textContent="—";addEvent(`Message created at <strong>PC-01</strong> for <strong>${$("destination").value}</strong>.`);addEvent(`Payload length: <strong>${bytes()} UTF-8 bytes</strong>. Transport: <strong>${state.protocol}</strong>.`);
+ const result=dijkstra("pc",state.dest);state.route=result.path;state.routeCost=result.cost;
+ if(!state.route.length){toast("No route available in this topology.");state.running=false;setControls();return}
+ $("metricHops").textContent=Math.max(0,state.route.filter(n=>n.startsWith("r")).length);addEvent(`Dijkstra selected route: <strong>${state.route.map(n=>nodeLabels[n]||n).join(" → ")}</strong> (cost ${state.routeCost}).`);
+ setStage(0);setControls();if($("mode").value==="guided")scheduleNext();else{$("statusLine").textContent="Explore mode: click Step Forward to begin encapsulation."}
+}
+function scheduleNext(){clearTimer();if(!state.running||state.paused||state.complete)return;const delay=Number($("speed").value);state.timer=setTimeout(()=>advance(),delay)}
+function advance(){
+ clearTimer();if(!state.running||state.paused||state.complete)return;
+ if(state.stage===0){setStage(1,0);addEvent("Application data prepared. Sender begins encapsulation.");}
+ else if(state.stage===1){
+  if(state.layerIndex<6){const next=state.layerIndex+1;setStage(1,next);const l=layers[6-next];addEvent(`Layer ${l.n} (${l.name}) processed. PDU: <strong>${l.pdu}</strong>.`);}
+  else {setStage(2);state.stepIndex=0;addEvent("Encapsulation complete. Network layer forwards the IP packet.");}
+ }else if(state.stage===2){
+  addEvent(`Route selected using Dijkstra. Total illustrative link cost: <strong>${state.routeCost}</strong>.`);
+  movePacketAlongRoute(()=>{if(!state.running||state.paused)return;setStage(3,0);state.stepIndex=0;addEvent("Packet reached destination-side network. Receiver begins decapsulation.");if($("mode").value==="guided")scheduleNext();else setControls()});return;
+ }else if(state.stage===3){
+  if(state.layerIndex<6){const next=state.layerIndex+1;setStage(3,next);const l=layers[next];addEvent(`Receiver processed Layer ${l.n} (${l.name}).`);}
+  else {setStage(4);state.complete=true;state.running=false;$("deliveredText").textContent=`"${state.message}" delivered to ${$("destination").value} (${ipForDestination()}). Route cost: ${state.routeCost}. This is a simulated delivery.`;$("successBox").classList.add("show");addEvent(`<strong>MESSAGE DELIVERED</strong> to ${$("destination").value}. Original payload recovered.`);$("packetDot").setAttribute("opacity","0");setControls();return}
+ }
+ setControls();
+ if($("mode").value==="guided")scheduleNext();
+}
+function togglePause(){if(!state.running||state.complete)return;state.paused=!state.paused;if(state.paused)clearTimer();else scheduleNext();setControls();$("statusLine").textContent=state.paused?"Paused. Inspect the current layer or resume when ready.":"Simulation resumed."}
+function stepForward(){if(!state.running||state.complete)return;if(state.paused)state.paused=false;advance();setControls()}
+function restartJourney(){if(!state.message||!state.running&&!state.complete){startTransmission();return}const msg=$("message").value;startTransmission();if($("mode").value==="explore"){state.paused=true;setControls();$("statusLine").textContent="Restarted. Explore mode: step forward when ready."}}
+function resetAll(){clearTimer();state={running:false,paused:false,complete:false,stage:-1,layerIndex:-1,route:[],routeCost:0,events:[],start:0,elapsed:0,timer:null,selectedLayer:7,stepIndex:0,message:"Hello, Network!",protocol:"TCP",dest:"server",source:"pc"};$("successBox").classList.remove("show");$("packetDot").setAttribute("opacity","0");$("progressFill").style.width="0%";$("statusLine").textContent="Ready to transmit. Enter a message and press Transmit Message.";$("stageTag").textContent="READY";$("metricStage").textContent="Ready";$("metricHops").textContent="—";$("metricBytes").textContent=bytes()+" B";$("metricTime").textContent="0.0s";$("routeLabel").textContent="Route: not calculated";$("inspectorTag").textContent="APPLICATION DATA";$("inspector").innerHTML='<h3>Original message</h3><div class="kv"><span>Payload</span><span class="codeish">Hello, Network!</span></div><div class="kv"><span>State</span><span>Ready to send</span></div><div class="kv"><span>Note</span><span>Illustrative protocol fields appear during transmission.</span></div>';document.querySelectorAll(".journey-step").forEach((e,i)=>e.classList.toggle("active",i===0));document.querySelectorAll(".journey-step").forEach(e=>e.classList.remove("done"));document.querySelectorAll(".edge").forEach(e=>e.classList.remove("active","failed"));document.querySelectorAll(".node").forEach(e=>e.classList.remove("active"));document.querySelector('[data-node="pc"]').classList.add("active");$("eventLog").innerHTML='<div class="empty">Transmission events will appear here.</div>';$("eventCount").textContent="0 events";renderLayers();setControls();$("transmitBtn").disabled=false}
+$("transmitBtn").addEventListener("click",startTransmission);$("playBtn").addEventListener("click",togglePause);$("stepBtn").addEventListener("click",stepForward);$("restartBtn").addEventListener("click",restartJourney);$("resetBtn").addEventListener("click",resetAll);
+$("message").addEventListener("input",()=>{if(!state.running){$("metricBytes").textContent=bytes()+" B";renderInspector(state.selectedLayer)}})
+$("destination").addEventListener("change",()=>{state.dest=nodeForDestination();if(!state.running)renderInspector(state.selectedLayer)})
+$("protocol").addEventListener("change",()=>{state.protocol=$("protocol").value;if(!state.running)renderInspector(state.selectedLayer)})
+$("mode").addEventListener("change",()=>{if(state.running){clearTimer();state.paused=true;setControls();toast("Mode changed. Resume or step through the current simulation.")}setControls()});
+$("speed").addEventListener("change",()=>{if(state.running&&!state.paused&&$("mode").value==="guided")scheduleNext()});
+$("helpBtn").addEventListener("click",()=>toast("Enter a message, choose TCP or UDP, then transmit. Select any OSI layer to inspect its role. Guided mode auto-plays; Explore mode uses Step Forward."));
+setInterval(()=>{if(state.start&& (state.running||state.complete)){state.elapsed=(Date.now()-state.start)/1000;$("metricTime").textContent=state.elapsed.toFixed(1)+"s"}},150);
+renderLayers();renderInspector(7);setControls();
+})();
+</script>
+</body>
+</html>
