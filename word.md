@@ -298,33 +298,47 @@ Total cost = 1 + 2 + 2 + 1 + 1 = 7
 - Show each hop highlighted with a trail
 - On arrival at PC: show "ACK Received — Connection Established" banner
 
-### Step 7 — Score Summary Screen
-- Show score per level in a breakdown table
-- Compare user path cost vs. optimal path cost
-- Show total score out of 400
-- "Play Again" button resets all state
+### Step 7 — Level 5: Destination Routing & Dynamic Link Failure
+- Routing from ISP Gateway across transit backbone to Destination Router (`R_DEST`).
+- Mid-route dynamic fiber failure triggers: random forward link is severed (`✖ SEVERED` crimson jagged line, sparks, red alert flash).
+- Traversal across broken link blocked with warning toast.
+- Player dynamically reroutes around the failure.
+- TTL decrements per hop; payload safely delivered to destination router (`R_DEST`).
+- Performance debrief and reroute achievement bonus (+250 PTS).
+- Player clicks `DECAPSULATE PACKET ➜`.
 
-### Step 8 — Polish and UX
-- Add micro-animations (pulse on active node, glow on packet)
-- Transition animations between levels (slide or fade)
-- Mobile-responsive layout with CSS grid
-- Tooltips on every network concept term using `title` attributes and custom CSS tooltips
-- Sound cues (optional, using Web Audio API beeps for hop/fail events)
+### Step 8 — Level 6: Destination Host Decapsulation (Reverse OSI)
+- Incoming sealed IPv4 datagram received at recipient interface (`Ahmed`, `Dhruv`, etc.).
+- **Phase 0 (Network Layer L3)**: Destination IP checked against local interface IP; player clicks `🔓 STRIP IPv4 HEADER (L3) ➜`.
+- **Phase 1 (Transport Layer L4)**: Destination Port `443` matched to active HTTPS listening socket, checksum verified (`0x7A4F`); player clicks `🔓 STRIP TRANSPORT HEADER (L4) ➜`.
+- **Phase 2 (Application Layer L7)**: Raw payload extracted and presented in recipient's host terminal/chat bubble with delivery confirmation.
+- Player clicks `TRANSMIT TCP ACKNOWLEDGEMENT (ACK) ➜`.
+
+### Step 9 — Level 7: TCP Acknowledgement (ACK) Return Route & "Connection Established"
+- TCP ACK packet is generated and retraces the **exact same route chosen by the user** in reverse order (`R_DEST` ➜ ... ➜ `ISP` ➜ ... ➜ `R1` ➜ `PC-01`).
+- Two-tier network transit circuit: Top tier retraces transit backbone, vertical conduit through ISP core, bottom tier retraces local mesh to source host.
+- Animated golden ACK packet glides hop-by-hop with particle trails, pulse rings, and live TCP flag telemetry (`ACK=1, SYN=0`).
+- On arrival at sender's host (`PC-01`), celebration fireworks burst and a prompt modal appears:
+  - Header: **"Connection Established"**
+  - Subtitle: *TCP 3-Way Handshake Confirmed · Full Bidirectional Transmission Complete*
+  - Complete transmission metrics: original message, recipient, forward path, ACK return path, total round-trip latency (RTT in ms), and cumulative points.
+  - Buttons: `↺ Replay ACK Route` and `✉ Compose New Message`.
 
 ---
 
-## 9. KEY TECHNICAL DECISIONS
+## 9. KEY TECHNICAL IMPLEMENTATION (Pygame Architecture)
 
-| Decision | Choice | Reason |
-|----------|--------|--------|
-| Framework | None (Vanilla JS) | Self-contained, no install needed |
-| Rendering | SVG + CSS | Crisp, scalable, animatable |
-| Drag and Drop | HTML5 Drag and Drop API | Native, no dependencies |
-| Routing Algorithm | Dijkstra in JS | Already in existing file |
-| Scoring | Cost-delta formula | Fair, teaches path optimality |
-| Game State | Single JS object | Simple, no Redux needed |
-| Level Transitions | CSS class toggling + transitions | Smooth, lightweight |
-| Timer | setInterval | Simple TTL countdown |
+| Component | Implementation | Feature |
+|-----------|----------------|---------|
+| Core Engine | Pygame-CE / Python 3.14 | High-performance 60 FPS 2D canvas |
+| Stage 1 | `Level1Compose` | Message input + recipient dropdown (`Ahmed`, `Dhruv`) |
+| Stage 2 | `LevelOSPorts` | Operating System port multiplexing & socket conduit |
+| Stage 3 | `LevelInsideOS` | Transport Header attachment + Layer 4 Envelope drag-and-drop |
+| Stage 4 | `Level3IPEncapsulation` | 32-bit IPv4 Header Grid, `VER` input (`0100`/`0110`), Outer Envelope sealing |
+| Stage 5 | `Level4Routing` | Home-to-ISP routing mesh, hidden Dijkstra benchmarks, $Score = Avg - UserCost$ |
+| Stage 6 | `Level5DestRouting` | ISP-to-Destination routing, dynamic link severing, failure alert, dynamic reroute |
+| Stage 7 | `Level6Decapsulation` | Reverse OSI decapsulation: L3 IPv4 strip, L4 TCP demux, L7 payload delivery |
+| Stage 8 | `Level7AckReturn` | ACK retraces exact user path; celebratory prompt: "Connection Established" |
 
 ---
 
@@ -335,17 +349,17 @@ Total cost = 1 + 2 + 2 + 1 + 1 = 7
 | **OSI Model** | 7-layer reference model for network communication |
 | **Encapsulation** | Adding headers at each layer as data moves down the stack |
 | **Decapsulation** | Removing headers as data moves up the stack at receiver |
-| **TTL** | Time To Live — a counter that prevents packets from looping forever |
+| **TTL** | Time To Live — a hop counter that prevents packets from looping forever |
 | **Routing** | Selecting the best path through a network of routers |
 | **Dijkstra** | Algorithm to find shortest/cheapest path in a weighted graph |
 | **Hop** | Each router a packet passes through counts as one hop |
 | **Link Cost** | A weight representing delay, bandwidth, or congestion on a link |
-| **ACK** | Acknowledgement — sent back to confirm data was received |
-| **TCP** | Transmission Control Protocol — reliable, connection-oriented |
-| **UDP** | User Datagram Protocol — fast, connectionless, no guaranteed delivery |
+| **Dynamic Rerouting** | Automatically adapting routing paths when a network link or node fails |
+| **TCP ACK** | Acknowledgement packet sent back to confirm reliable delivery of data |
+| **Round Trip Time (RTT)** | Total latency for data packet to reach destination plus ACK to return |
+| **3-Way Handshake** | Synchronization and acknowledgement process establishing a reliable TCP session |
 | **IP Address** | Logical address used to identify devices across networks |
-| **MAC Address** | Physical hardware address used within a local network segment |
-| **PDU** | Protocol Data Unit — name of data at each OSI layer (frame, packet, segment) |
+| **Port** | 16-bit number identifying specific network processes on an OS |
 
 ---
 
@@ -353,27 +367,29 @@ Total cost = 1 + 2 + 2 + 1 + 1 = 7
 
 ```
 packet-path-osi-simulator/
-
-|-- game.py          <- Python main logic using pygame
-|-- word.md          <- This document
-`-- README.md        <- Project readme
+|-- game.py          <- Python main game built with pygame (Complete 7-stage game)
+|-- word.md          <- This specification and design document
+`-- README.md        <- Project overview
 ```
 
 ---
 
 ## 12. ACCEPTANCE CRITERIA
 
-- [ ] Player can type a message and see it encapsulated through 7 OSI layers interactively
-- [ ] Drag-and-drop into envelope works with visual feedback
-- [ ] Network topology is rendered as SVG with labeled costs on edges
-- [ ] Player can click to choose routing path hop by hop
-- [ ] TTL countdown is visible and decrements per hop
-- [ ] A link breaks mid-route (visual red line) and player must reroute
-- [ ] Packet reaches destination with success animation
-- [ ] Decapsulation shows layer-by-layer unwrapping with header details
-- [ ] ACK travels back along user's chosen path automatically
-- [ ] Score is calculated and displayed after each level
-- [ ] Final score summary compares player cost vs optimal Dijkstra cost
-- [ ] Game is fully self-contained (open index.html in browser, no server needed)
-- [ ] Dark mode, neon aesthetic, smooth animations throughout
-- [ ] All networking terms have tooltip explanations in context
+- [x] Player can type a message and select recipient (`Ahmed`, `Dhruv`)
+- [x] Message travels into OS with ephemeral socket port animation
+- [x] Transport header (Src Port, Dst Port 443, Checksum) drag & sealed into L4 envelope
+- [x] 32-bit IPv4 header grid with user VER input (`0100`/`0110`) and sealed outer envelope
+- [x] Router mesh to ISP with random weights and hidden Dijkstra benchmarks
+- [x] Score calculation ($Average - User Cost$) on reaching ISP
+- [x] Transit backbone from ISP to Destination Router
+- [x] Dynamic link failure mid-route with visual crimson severed effect and alert
+- [x] Movement across severed link is blocked with alert toast
+- [x] Player dynamically reroutes around the broken link to safely reach destination router
+- [x] Decapsulation at destination: L3 IPv4 verification and header stripping
+- [x] Decapsulation at destination: L4 TCP port demux and checksum verification
+- [x] Decapsulation at destination: L7 Application payload extracted and delivered to host
+- [x] Acknowledgement (ACK) generated and sent back on the exact same route chosen by user
+- [x] Prompt appears upon ACK arrival saying "Connection Established" with full telemetry
+
+
